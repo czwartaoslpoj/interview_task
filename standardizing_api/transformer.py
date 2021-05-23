@@ -1,6 +1,5 @@
 from collections import OrderedDict
 from configparser import ParsingError
-from typing import Union
 
 import numpy as np
 from loguru import logger
@@ -13,45 +12,17 @@ class Transformer():
     def __init__(self):
         self.scaler = StandardScaler()
 
-    def transform(self, validated_data: OrderedDict) -> Union[StandardizeResponseBody, dict]:
+    def transform(self, validated_data: OrderedDict) -> StandardizeResponseBody:
 
         combined_list = []
 
-        try:
-            for key, value in validated_data.items():
-                combined_list.append(value)
+        for key, value in validated_data.items():
+            combined_list.append(value)
 
-            standardized_data = self.standardize(combined_list)
-            response_body = self.parse_results_into_standardize_response_body(standardized_data)
+        standardized_data = self.standardize(combined_list)
+        response_body = self.parse_results_into_standardize_response_body(standardized_data)
 
-            return response_body
-
-        except ParsingError as e:
-
-            json_response = {
-                "success": False,
-                "error": e.message
-            }
-            return json_response
-
-        except ScalingError as e:
-
-            json_response = {
-                "success": False,
-                "error": e.message
-            }
-            return json_response
-
-        except Exception as e:
-
-            error_msg = "Unexpected error occurred while standardizing data"
-            logger.error(f"{error_msg}: {str(e)}")
-
-            json_response = {
-                "success": False,
-                "error": error_msg
-            }
-            return json_response
+        return response_body
 
     def standardize(self, input_list: list) -> np.ndarray:
 

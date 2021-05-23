@@ -5,6 +5,7 @@ from loguru import logger
 from rest_framework import viewsets
 from rest_framework.request import Request
 
+from standardizing_api.models import ParsingError, ScalingError
 from standardizing_api.serializers import RequestBodySerializer
 from standardizing_api.transformer import Transformer
 
@@ -23,9 +24,37 @@ class StandardizerView(viewsets.ViewSet):
         serializer = RequestBodySerializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            transformed_data = self.transformer.transform(validated_data)
-            logger.success("Data got successfully standardized.")
-            return HttpResponse(json.dumps(transformed_data.as_dict()), content_type="application/json")
+            try:
+                transformed_data = self.transformer.transform(validated_data)
+                logger.success("Data got successfully standardized.")
+                return HttpResponse(json.dumps(transformed_data.as_dict()), content_type="application/json")
+
+            except ParsingError as e:
+
+                json_response = {
+                    "success": False,
+                    "error": e.message
+                }
+                return HttpResponse(json.dumps(json_response), content_type="application/json")
+
+            except ScalingError as e:
+
+                json_response = {
+                    "success": False,
+                    "error": e.message
+                }
+                return HttpResponse(json.dumps(json_response), content_type="application/json")
+
+            except Exception as e:
+
+                error_msg = "Unexpected error occurred while standardizing data"
+                logger.error(f"{error_msg}: {str(e)}")
+
+                json_response = {
+                    "success": False,
+                    "error": error_msg
+                }
+                return HttpResponse(json.dumps(json_response), content_type="application/json")
         else:
             return HttpResponse(serializer.errors, status=400)
 
