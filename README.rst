@@ -28,7 +28,7 @@ Endpoint returns standardized data.
 
 Source Code
 ---------------
-API dir in the project is called: standardizing_api
+Api directory in the project is called: standardizing_api
 
 Basic Commands
 --------------
@@ -37,6 +37,7 @@ Basic Commands
 3. Now you can use the endpoint. Address: http://127.0.0.1:8000/api/v1/standardize
 
 Docker:
+
 1. Run: docker-compose up
 2. Use containarized api: http://127.0.0.1:8000/api/v1/standardize
 
