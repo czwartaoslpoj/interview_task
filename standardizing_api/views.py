@@ -29,21 +29,15 @@ class StandardizerView(viewsets.ViewSet):
                 logger.success("Data got successfully standardized.")
                 return HttpResponse(json.dumps(transformed_data.as_dict()), content_type="application/json")
 
-            except ParsingError as e:
+            except (ParsingError, ScalingError) as e:
 
                 json_response = {
                     "success": False,
                     "error": e.message
                 }
-                return HttpResponse(json.dumps(json_response), content_type="application/json")
-
-            except ScalingError as e:
-
-                json_response = {
-                    "success": False,
-                    "error": e.message
-                }
-                return HttpResponse(json.dumps(json_response), content_type="application/json")
+                return HttpResponse(json.dumps(json_response),
+                                    content_type="application/json",
+                                    status=400)
 
             except Exception as e:
 
@@ -54,7 +48,9 @@ class StandardizerView(viewsets.ViewSet):
                     "success": False,
                     "error": error_msg
                 }
-                return HttpResponse(json.dumps(json_response), content_type="application/json")
+                return HttpResponse(json.dumps(json_response),
+                                    content_type="application/json",
+                                    status=400)
         else:
             return HttpResponse(serializer.errors, status=400)
 
