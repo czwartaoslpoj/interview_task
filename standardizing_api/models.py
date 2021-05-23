@@ -1,3 +1,15 @@
-from django.db import models
+from dataclasses import dataclass
 
-# Create your models here.
+
+@dataclass
+class SensorResults:
+    sensor1: list
+    sensor2: list
+    sensor3: list
+
+
+@dataclass
+class StandardizeResponseBody:
+    success: bool
+    result: SensorResults
+
