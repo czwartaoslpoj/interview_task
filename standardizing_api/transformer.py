@@ -48,7 +48,7 @@ class Transformer():
             logger.error(f"{error_msg}. Exception:{e}")
             raise ScalingError(error_msg) from e
 
-    def parse_results_into_standardize_response_body(self, results: np.ndarray) -> StandardizedResponseBody:
+    def parse_results_into_standardized_response_body(self, results: np.ndarray) -> StandardizedResponseBody:
         """
         Parse result of transformation to StandardizedResponseBudy dataclass.
         n case of exception encountered raise ParsingError.

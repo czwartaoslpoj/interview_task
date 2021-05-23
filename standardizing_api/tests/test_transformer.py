@@ -29,7 +29,7 @@ def test_convert_to_list(transformer, transformed_list):
 
 def test_parse_results_into_standardized_response_body(transformer, transformed_list):
 
-    actual_response_body = transformer.parse_results_into_standardize_response_body(transformed_list)
+    actual_response_body = transformer.parse_results_into_standardized_response_body(transformed_list)
     sensor1 = [0.17354382, -0.69810162, 0.60936654, 1.39070637, -1.47551512]
 
     assert type(actual_response_body.result) == SensorResults
@@ -41,7 +41,7 @@ def test_parse_results_into_standardized_response_body_with_exception(mocker, tr
 
     mocker.patch('standardizing_api.transformer.Transformer.convert_to_list', side_effect = Exception)
     with pytest.raises(ParsingError):
-        transformer.parse_results_into_standardize_response_body(transformed_list)
+        transformer.parse_results_into_standardized_response_body(transformed_list)
 
 
 def test_transform(transformer, validated_data):
