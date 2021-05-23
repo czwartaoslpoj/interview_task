@@ -1,3 +1,4 @@
+from loguru import logger
 from rest_framework import serializers
 
 
@@ -10,8 +11,10 @@ class RequestBodySerializer(serializers.Serializer):
         """ In order for data to be standardized, all lists need to be of the same size """
 
         if len(data["sensor_1"]) == len(data["sensor_2"]) == len(data["sensor_3"]):
+            logger.success("Data got successfully validated")
             return data
         else:
             raise serializers.ValidationError("Input lists are not of equal size")
+
     class Meta:
         fields = ['sensor_1', 'sensor_2', 'sensor_3']
