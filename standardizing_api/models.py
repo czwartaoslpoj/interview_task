@@ -13,3 +13,11 @@ class StandardizeResponseBody:
     success: bool
     result: SensorResults
 
+
+class ParsingError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+class ScalingError(Exception):
+    def __init__(self, message):
+        self.message = message
