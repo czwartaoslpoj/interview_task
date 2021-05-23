@@ -17,7 +17,6 @@ class StandardizerView(viewsets.ViewSet):
         if serializer.is_valid():
             validated_data = serializer.validated_data
             transformed_data = self.transformer.transform(validated_data)
-            print(transformed_data.as_dict())
             return HttpResponse(json.dumps(transformed_data.as_dict()), content_type="application/json")
         else:
             return HttpResponse(serializer.errors, status=400)
