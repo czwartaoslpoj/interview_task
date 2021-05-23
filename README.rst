@@ -25,9 +25,14 @@ Data is then passed to Transformer class, which takes care of standardization.
 Quote: "The standardization technique is simply removing the mean and dividing by standard divation for each column"
 
 Endpoint returns standardized data.
+
+Source Code
+---------------
+API dir in the project is called: standardizing_api
+
 Basic Commands
 --------------
-1. Install requirements with: pip -r requirements.local.txt
+1. Install requirements with: pip -r requirements/local.txt
 2. Run the standardizing_api with: python3 manage.py runserver
 3. Now you can use the endpoint. Address: http://127.0.0.1:8000/api/v1/standardize
 
@@ -38,4 +43,4 @@ Docker:
 Testing
 -------------
 
-In order to check test coverage of the project, run simply: pytest --cov=standardizing_api standardizing_api/tests
+In order to check test coverage of the project, from root directory run simply: pytest --cov=standardizing_api standardizing_api/tests
