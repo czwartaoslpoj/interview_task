@@ -12,67 +12,30 @@ Behold My Awesome Project!
 
 :License: MIT
 
-Settings
+Overview
 --------
+This project containes small API written with Django Rest Framework.
 
-Moved to settings_.
+API has only one endpoint: api/v1/standardize which takes json containing three sensor lists containing decimal numbers.
 
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
+Json is getting validated with help of Serializer. In case of unequal lists being provided in json, ValidationError is thrown.
 
+Data is then passed to Transformer class, which takes care of standardization.
+
+Quote: "The standardization technique is simply removing the mean and dividing by standard divation for each column"
+
+Endpoint returns standardized data.
 Basic Commands
 --------------
+1. Install requirements with: pip -r requirements.local.txt
+2. Run the standardizing_api with: python3 manage.py runserver
+3. Now you can use the endpoint. Address: http://127.0.0.1:8000/api/v1/standardize
 
-Setting Up Your Users
-^^^^^^^^^^^^^^^^^^^^^
+Docker:
+1. Run: docker-compose up
+2. Use containarized api: http://127.0.0.1:8000/api/v1/standardize
 
-* To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+Testing
+-------------
 
-* To create an **superuser account**, use this command::
-
-    $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-Type checks
-^^^^^^^^^^^
-
-Running type checks with mypy:
-
-::
-
-  $ mypy compredict_interview_task
-
-Test coverage
-^^^^^^^^^^^^^
-
-To run the tests, check your test coverage, and generate an HTML coverage report::
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-Running tests with py.test
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  $ pytest
-
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
-
-Deployment
-----------
-
-The following details how to deploy this application.
-
-Docker
-^^^^^^
-
-See detailed `cookiecutter-django Docker documentation`_.
-
-.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
+In order to check test coverage of the project, run simply: pytest --cov=standardizing_api standardizing_api/tests
