@@ -5,8 +5,11 @@ from rest_framework import viewsets
 from rest_framework.request import Request
 
 from standardizing_api.serializers import RequestBodySerializer
+from standardizing_api.transformer import Transformer
+
 
 class StandardizerView(viewsets.ViewSet):
+    transformer = Transformer()
 
     def supervise_standardization(self, request: Request):
 
