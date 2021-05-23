@@ -12,7 +12,7 @@ class SensorResults:
 
 
 @dataclass
-class StandardizeResponseBody:
+class StandardizedResponseBody:
     success: bool
     result: SensorResults
 
