@@ -57,3 +57,18 @@ def incorrect_json_payload(request):
                               "sensor_2": [5444.44, 33.22, 622.55, 812.54, 1233.24],
                               "sensor_3": [0.44, 0.22, 0.54, 0.24]}
     return incorrect_json_payload
+
+@pytest.fixture(scope="session")
+def successful_json_response():
+    successful_json_response = {"success": True,
+                                "result": {
+                                    "sensor1": [0.17354382, -0.69810162, 0.60936654, 1.39070637, -1.47551512],
+                                    "sensor2": [1.96026147, -0.82000937, -0.51721314, -0.41959677, -0.2034422],
+                                    "sensor3": [0.29452117, -1.24820879, 1.06588616, 0.99576207, -1.10796061]
+                                }}
+    return successful_json_response
+
+@pytest.fixture(scope="session")
+def endpoint():
+    endpoint = '/api/v1/standardize'
+    return endpoint
