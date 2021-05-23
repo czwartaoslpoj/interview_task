@@ -5,14 +5,20 @@ import numpy as np
 from loguru import logger
 from sklearn.preprocessing import StandardScaler
 
-from standardizing_api.models import StandardizeResponseBody, ScalingError, SensorResults, ParsingError
+from standardizing_api.models import StandardizedResponseBody, ScalingError, SensorResults, ParsingError
 
 
 class Transformer():
     def __init__(self):
         self.scaler = StandardScaler()
 
-    def transform(self, validated_data: OrderedDict) -> StandardizeResponseBody:
+    def transform(self, validated_data: OrderedDict) -> StandardizedResponseBody:
+        """
+        Transform data validated by Serializer.
+        1.Create list containing list with decimal values of sensors
+        2.Use StandardScaler in order to standardize data
+        3.Parse transformed data into StandardizeResponseBody
+        """
 
         combined_list = []
 
@@ -20,11 +26,16 @@ class Transformer():
             combined_list.append(value)
 
         standardized_data = self.standardize(combined_list)
-        standardize_response_body = self.parse_results_into_standardize_response_body(standardized_data)
+        standardized_response_body = self.parse_results_into_standardized_response_body(standardized_data)
 
-        return standardize_response_body
+        return standardized_response_body
 
     def standardize(self, input_list: list) -> np.ndarray:
+        """
+        Take list with lists of decimal values, transpose it and transform.
+        Returns transformed data in type of numpy array.
+        In case of any Exceptions encountered raise ScalingError
+        """
 
         try:
             transposed_list = np.array(input_list).T
@@ -37,15 +48,19 @@ class Transformer():
             logger.error(f"{error_msg}. Exception:{e}")
             raise ScalingError(error_msg) from e
 
-    def parse_results_into_standardize_response_body(self, results: np.ndarray) -> StandardizeResponseBody:
+    def parse_results_into_standardize_response_body(self, results: np.ndarray) -> StandardizedResponseBody:
+        """
+        Parse result of transformation to StandardizedResponseBudy dataclass.
+        n case of exception encountered raise ParsingError.
 
+        """
         try:
             sensor_results = SensorResults(
                 self.convert_to_list(results[0]),
                 self.convert_to_list(results[1]),
                 self.convert_to_list(results[2])
             )
-            response_body = StandardizeResponseBody(success=True, result=sensor_results)
+            response_body = StandardizedResponseBody(success=True, result=sensor_results)
 
             logger.success("Standardized data got successfully parsed into StandardizeResponseBody")
 
@@ -57,6 +72,9 @@ class Transformer():
             raise ParsingError(message) from e
 
     def convert_to_list(self, input_list: np.ndarray) -> list:
+        """
+        Convert numpy array to list. Trim decimals.
+        """
 
         output_list = []
         input_list = input_list.tolist()
