@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from standardizing_api.models import ScalingError, SensorResults, StandardizeResponseBody, ParsingError
+from standardizing_api.models import ScalingError, SensorResults, StandardizedResponseBody, ParsingError
 
 
 def test_standardize(transformer, combined_list, transformed_list):
@@ -33,7 +33,7 @@ def test_parse_results_into_standardized_response_body(transformer, transformed_
     sensor1 = [0.17354382, -0.69810162, 0.60936654, 1.39070637, -1.47551512]
 
     assert type(actual_response_body.result) == SensorResults
-    assert type(actual_response_body) == StandardizeResponseBody
+    assert type(actual_response_body) == StandardizedResponseBody
     assert actual_response_body.result.sensor1 == sensor1
 
 
@@ -49,6 +49,6 @@ def test_transform(transformer, validated_data):
     sensor1 = [0.17354382, -0.69810162, 0.60936654, 1.39070637, -1.47551512]
 
     result_body = transformer.transform(validated_data)
-    assert type(result_body) == StandardizeResponseBody
+    assert type(result_body) == StandardizedResponseBody
     assert result_body.result.sensor1 == sensor1
     assert result_body.success == True
