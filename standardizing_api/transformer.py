@@ -1,11 +1,11 @@
 from collections import OrderedDict
-from configparser import ParsingError
+
 
 import numpy as np
 from loguru import logger
 from sklearn.preprocessing import StandardScaler
 
-from standardizing_api.models import StandardizeResponseBody, ScalingError, SensorResults
+from standardizing_api.models import StandardizeResponseBody, ScalingError, SensorResults, ParsingError
 
 
 class Transformer():
@@ -20,9 +20,9 @@ class Transformer():
             combined_list.append(value)
 
         standardized_data = self.standardize(combined_list)
-        response_body = self.parse_results_into_standardize_response_body(standardized_data)
+        standardize_response_body = self.parse_results_into_standardize_response_body(standardized_data)
 
-        return response_body
+        return standardize_response_body
 
     def standardize(self, input_list: list) -> np.ndarray:
 
@@ -33,9 +33,9 @@ class Transformer():
             return transformed_data
 
         except Exception as e:
-            error_msg = f"Error occurred while scaling data. Exception: {e}"
-            logger.error(error_msg)
-            raise ScalingError(error_msg)
+            error_msg = "Error occurred while transforming data with Scaler."
+            logger.error(f"{error_msg}. Exception:{e}")
+            raise ScalingError(error_msg) from e
 
     def parse_results_into_standardize_response_body(self, results: np.ndarray) -> StandardizeResponseBody:
 
@@ -59,7 +59,6 @@ class Transformer():
     def convert_to_list(self, input_list: np.ndarray) -> list:
 
         output_list = []
-
         input_list = input_list.tolist()
 
         for item in input_list:
